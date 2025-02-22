@@ -49,7 +49,7 @@ pipeline {
                 sh "ls -l ./*" 
                 
                 echo "rmqp-example project files: "
-                sh "ls -l rmqp-example/*
+                sh "ls -l rmqp-example/*"
                 
                 // List all branches in your repo. 
                 sh "git branch -a"
