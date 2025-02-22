@@ -14,8 +14,8 @@ pipeline {
                     image: jenkins/inbound-agent:latest
                     //image: jenkins/inbound-agent:3107.v665000b_51092-4 
                   - name: docker
-                    //image: docker:latest
-                    image: yidgar11/docker_with_docker_compose:1.0
+                    image: docker:latest
+                    //image: yidgar11/docker_with_docker_compose:1.0
                     command:
                     - cat
                     tty: true
