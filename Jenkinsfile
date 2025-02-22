@@ -44,9 +44,15 @@ pipeline {
                     '''
                 }
                 echo 'Repository cloned successfully!'
-               sh "ls -lart ./*" 
-               // List all branches in your repo. 
-               sh "git branch -a"
+
+                echo "jenkins project files: "
+                sh "ls -l ./*" 
+                
+                echo "rmqp-example project files: "
+                sh "ls -l rmqp-example/*
+                
+                // List all branches in your repo. 
+                sh "git branch -a"
               }
            }
         }
