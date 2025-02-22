@@ -28,14 +28,22 @@ pipeline {
             '''
         }
     }
-    stages {
 
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
+    }
+    
+    stages {
         stage('Checkout') {
           steps {
             script {
-               // The below will clone your repo and will be checked out to master branch by default.
-               git credentialsId: 'dockerhub-credentials1', url: 'https://github.com/yidgar11/rmqp-example.git'
-               // Do a ls -lart to view all the files are cloned. It will be clonned. This is just for you to be sure about it.
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials1', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh '''
+                        echo "Cloning repository using credentials..."
+                        git clone https://$USERNAME:$PASSWORD@github.com/yidgar11/rmqp-example.git
+                    '''
+                }
+                echo 'Repository cloned successfully!'
                sh "ls -lart ./*" 
                // List all branches in your repo. 
                sh "git branch -a"
@@ -59,5 +67,18 @@ pipeline {
                 }
             }
         }
+
+        // stage('Push to Docker Hub') {
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+        //             sh '''
+        //                 echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+        //                 docker push your-dockerhub-username/your-repo:$BUILD_NUMBER
+        //                 docker logout
+        //             '''
+        //         }
+        //         echo 'Docker image pushed to Docker Hub!'
+        //     }
+        // }
     }
 }
