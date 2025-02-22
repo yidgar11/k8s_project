@@ -75,7 +75,7 @@ pipeline {
         stage('Test') {
             steps {
                 container('docker') {
-                    sh 'docker imnages'
+                    sh 'docker images'
                 }
             }
         }
