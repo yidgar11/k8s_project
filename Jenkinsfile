@@ -55,7 +55,7 @@ pipeline {
                 // List all branches in your repo. 
                 sh "git branch -a"
 
-                sh "apk update && apk add docker-compose && docker-compose -v"
+                // sh "apk update && apk add docker-compose && docker-compose -v"
               }
            }
         }
