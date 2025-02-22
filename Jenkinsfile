@@ -16,7 +16,12 @@ pipeline {
                   - name: docker
                     image: docker:latest
                     command:
-                    - cat
+                    - sh
+                    - -c
+                    - |
+                      apk add --no-cache python3 py3-pip && \
+                      pip3 install docker-compose && \
+              cat # Keep container running after setup
                     tty: true
                     volumeMounts:
                       - name: docker-sock
