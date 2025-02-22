@@ -59,7 +59,7 @@ pipeline {
         stage('Build Consumer') {
             steps {
                 container('docker') {
-                    sh 'cd rmqp-example/consumer' 
+                    sh 'cd rmqp-example/consumer ; ls -l' 
                     sh 'docker build -t yidgar11/consumer:1.0 .'
                     sh 'cd ../../'
                 }
@@ -69,7 +69,7 @@ pipeline {
         stage('Build Producer') {
             steps {
                 container('docker') {
-                    sh 'cd rmqp-example/consumer' 
+                    sh 'cd rmqp-example/consumer ; ls -l' 
                     sh 'docker build -t yidgar11/producer:1.0 .'
                     sh 'cd ../../'
                 }
