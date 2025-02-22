@@ -61,7 +61,7 @@ pipeline {
                 container('docker') {
                     sh 'cd rmqp-example/consumer' 
                     sh 'docker build -t yidgar11/consumer:1.0 .'
-                    cd ../../
+                    sh 'cd ../../'
                 }
             }
         }
@@ -71,7 +71,7 @@ pipeline {
                 container('docker') {
                     sh 'cd rmqp-example/consumer' 
                     sh 'docker build -t yidgar11/producer:1.0 .'
-                    cd ../../
+                    sh 'cd ../../'
                 }
             }
         }      
