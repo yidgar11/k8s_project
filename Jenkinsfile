@@ -46,7 +46,7 @@ pipeline {
                 echo 'Repository cloned successfully!'
 
                 echo "jenkins project files: "
-                sh "ls -l ./*" 
+                sh "ls -l " 
                 
                 echo "rmqp-example project files: "
                 sh "ls -l rmqp-example/*"
