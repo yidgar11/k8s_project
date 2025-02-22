@@ -51,27 +51,35 @@ pipeline {
                 echo "rmqp-example project files: "
                 sh "ls -l rmqp-example/*"
                 
-                // List all branches in your repo. 
                 sh "git branch -a"
-
-                // sh "apk update && apk add docker-compose && docker-compose -v"
               }
            }
         }
         
-        stage('Build') {
+        stage('Build Consumer') {
             steps {
                 container('docker') {
-                    sh 'ls -l' 
-                    sh 'docker --version'
+                    sh 'cd rmqp-example/consumer' 
+                    sh 'docker build -t yidgar11/consumer:1.0 .'
+                    cd ../../
                 }
             }
         }
+
+        stage('Build Producer') {
+            steps {
+                container('docker') {
+                    sh 'cd rmqp-example/consumer' 
+                    sh 'docker build -t yidgar11/producer:1.0 .'
+                    cd ../../
+                }
+            }
+        }      
         
         stage('Test') {
             steps {
                 container('docker') {
-                    sh 'docker --version'
+                    sh 'docker imnages'
                 }
             }
         }
