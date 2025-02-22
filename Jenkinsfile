@@ -53,6 +53,8 @@ pipeline {
                 
                 // List all branches in your repo. 
                 sh "git branch -a"
+
+                sh "docker-compose -v"
               }
            }
         }
