@@ -56,26 +56,29 @@ pipeline {
            }
         }
         
-        stage('Build Consumer') {
+        stage('Build') {
             steps {
                 container('docker') {
                     sh 'docker build -t yidgar11/consumer:1.0 -f rmqp-example/consumer/Dockerfile rmqp-example/consumer'
+                    sh 'docker build -t yidgar11/producer:1.0 -f rmqp-example/producer/Dockerfile rmqp-example/producer'
                 }
             }
         }
 
-        stage('Build Producer') {
+        stage('Push') {
             steps {
                 container('docker') {
-                    sh 'docker build -t yidgar11/producer:1.0 -f rmqp-example/producer/Dockerfile rmqp-example/producer'
+                    sh 'docker push yidgar11/consumer:1.0'
+                    sh 'docker push yidgar11/producer:1.0'
                 }
             }
         }      
+
         
         stage('Test') {
             steps {
                 container('docker') {
-                    sh 'docker images'
+                    sh 'docker images | grep yidgar11 '
                 }
             }
         }
