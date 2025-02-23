@@ -68,8 +68,16 @@ pipeline {
         stage('Push') {
             steps {
                 container('docker') {
-                    sh 'docker push yidgar11/consumer:1.0'
-                    sh 'docker push yidgar11/producer:1.0'
+                    script {
+                         withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials1', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                         sh '''
+                            echo "DockerHub Login using credentials..."
+                            docker login docker.io -u $USERNAME -p $PASSWORD
+                         '''
+                        }
+                        sh 'docker push yidgar11/consumer:1.0'
+                        sh 'docker push yidgar11/producer:1.0'
+                    }
                 }
             }
         }      
