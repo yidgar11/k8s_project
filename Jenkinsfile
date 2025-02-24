@@ -48,10 +48,6 @@ pipeline {
                         git clone https://$USERNAME:$PASSWORD@github.com/yidgar11/rmqp-example.git
                     '''
                 }
-
-                ansiColor('vga') {
-                  echo '\033[42m\033[97mWhite letters, green background\033[0m'
-                }
                 
                 echo "\033[1;32m[Success] \033[0m Repository cloned successfully! " 
 
@@ -71,8 +67,9 @@ pipeline {
                 container('docker') {
                     sh 'docker build -t yidgar11/consumer:1.0 -f rmqp-example/consumer/Dockerfile rmqp-example/consumer'
                     sh 'docker build -t yidgar11/producer:1.0 -f rmqp-example/producer/Dockerfile rmqp-example/producer'
-                    echo "\033[1;32m[Success] \033[0m Docker imags built successfully! " 
-
+                    ansiColor('vga') {
+                      echo '\033[42m\033[97m[Success] Docker imags built successfully!\033[0m'
+                    }
                     //echo "\033[1;33m[Info]    \033[0m $1"
                     //echo "\033[1;31m[Error]   \033[0m $1"
                 }
@@ -88,11 +85,17 @@ pipeline {
                             echo "DockerHub Login using credentials..."
                             docker login docker.io -u $USERNAME -p $PASSWORD
                          '''
-                         echo "\033[1;32m[Success] \033[0m DockerHub Login successfully! " 
+                         ansiColor('vga') {
+                            echo '\033[42m\033[97m[Success] DockerHub Login successfully!\033[0m'
+                            }
+
                         }
                         sh 'docker push yidgar11/consumer:1.0'
                         sh 'docker push yidgar11/producer:1.0'
-                        echo "\033[1;32m[Success] \033[0m images pushed to DockerHub successfully! " 
+
+                        ansiColor('vga') {
+                            echo '\033[42m\033[97m[Success] images pushed to DockerHub  successfully!\033[0m'
+                        }
                     }
                 }
             }
@@ -103,7 +106,10 @@ pipeline {
             steps {
                 container('docker') {
                     sh 'docker images | grep -e "producer" -e "consumer" '
-                    echo "\033[1;32m[Success] \033[0m test successfully! " 
+
+                    ansiColor('vga') {
+                            echo '\033[42m\033[97m[Success] Test successfully!\033[0m'
+                        }
                 }
             }
         }
@@ -112,7 +118,10 @@ pipeline {
             steps {
                 container('helm') {
                     sh 'cd  k8s-project/ ; helm template k8s-project .'
-                    echo "\033[1;32m[Success] \033[0m helm successfully! " 
+
+                    ansiColor('vga') {
+                            echo '\033[42m\033[97m[Success] helm successfully!\033[0m'
+                        }
                 }
             }
         }
