@@ -12,7 +12,16 @@ pipeline {
                   containers:
                   - name: jnlp
                     image: jenkins/inbound-agent:latest
-                    //image: jenkins/inbound-agent:3107.v665000b_51092-4 
+                 - name: helm
+                    image: lachlanevenson/k8s-helm:v3.1.1
+                    command: "/bin/sh -c"
+                    args: "cat"
+                    ttyEnabled: true
+                    privileged: true
+                    resourceRequestCpu: "400m"
+                    resourceRequestMemory: "512Mi"
+                    resourceLimitCpu: "1"
+                    resourceLimitMemory: "1024Mi"
                   - name: docker
                     image: docker:latest
                     command:
@@ -86,8 +95,15 @@ pipeline {
         stage('Test') {
             steps {
                 container('docker') {
-                    sh 'helm version'
                     sh 'docker images | grep -e "producer" -e "consumer" '
+                }
+            }
+        }
+
+        stage('helm') {
+            steps {
+                container('helm') {
+                    sh 'helm version'
                 }
             }
         }
