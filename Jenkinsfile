@@ -86,22 +86,10 @@ pipeline {
         stage('Test') {
             steps {
                 container('docker') {
-                    sh 'docker images | grep yidgar11 '
+                    sh 'helm version'
+                    sh 'docker images | grep "producer|\consumer" '
                 }
             }
         }
-
-        // stage('Push to Docker Hub') {
-        //     steps {
-        //         withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-        //             sh '''
-        //                 echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-        //                 docker push your-dockerhub-username/your-repo:$BUILD_NUMBER
-        //                 docker logout
-        //             '''
-        //         }
-        //         echo 'Docker image pushed to Docker Hub!'
-        //     }
-        // }
     }
 }
