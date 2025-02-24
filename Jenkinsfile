@@ -32,6 +32,9 @@ pipeline {
                         path: /var/run/docker.sock
             '''
         }
+        options {
+            ansiColor('xterm')
+        }
     }
 
     environment {
