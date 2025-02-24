@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "k8s-project.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ include "k8s-project.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "k8s-project.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "k8s-project.name" . }}
+    spec:
+      containers:
+        - name: {{ .Values.image0.name }}
+          image: {{ .Values.image0.repository }}:{{ .Values.image0.tag }}
+          imagePullPolicy: {{ .Values.image0.pullPolicy }}
+          ports:
+            - name: daemon
+              containerPort: 5672
+            - name: managemnet
+              containerPort: 15672
+        - name: {{ .Values.image1.name }}
+          image: {{ .Values.image1.repository }}:{{ .Values.image1.tag }}
+          imagePullPolicy: {{ .Values.image1.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 5672
+        - name: {{ .Values.image2.name }}
+          image: {{ .Values.image1.repository }}:{{ .Values.image2.tag }}
+          imagePullPolicy: {{ .Values.image2.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 15672
