@@ -87,7 +87,7 @@ pipeline {
             steps {
                 container('docker') {
                     sh 'helm version'
-                    sh 'docker images | grep "producer|\consumer" '
+                    sh 'docker images | grep -e "producer" -e "consumer" '
                 }
             }
         }
