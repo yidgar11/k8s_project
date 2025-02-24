@@ -32,9 +32,6 @@ pipeline {
                         path: /var/run/docker.sock
             '''
         }
-        options {
-            ansiColor('xterm')
-        }
     }
 
     environment {
@@ -50,6 +47,10 @@ pipeline {
                         echo "Cloning repository using credentials..."
                         git clone https://$USERNAME:$PASSWORD@github.com/yidgar11/rmqp-example.git
                     '''
+                }
+
+                ansiColor('vga') {
+                  echo '\033[42m\033[97mWhite letters, green background\033[0m'
                 }
                 
                 echo "\033[1;32m[Success] \033[0m Repository cloned successfully! " 
