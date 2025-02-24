@@ -14,14 +14,10 @@ pipeline {
                     image: jenkins/inbound-agent:latest
                   - name: helm
                     image: lachlanevenson/k8s-helm:v3.1.1
-                    command: "/bin/sh -c"
-                    args: "cat"
-                    ttyEnabled: true
+                    command:
+                    - cat
+                    tty: true
                     privileged: true
-                    resourceRequestCpu: "400m"
-                    resourceRequestMemory: "512Mi"
-                    resourceLimitCpu: "1"
-                    resourceLimitMemory: "1024Mi"
                   - name: docker
                     image: docker:latest
                     command:
