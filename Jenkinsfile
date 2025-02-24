@@ -12,7 +12,7 @@ pipeline {
                   containers:
                   - name: jnlp
                     image: jenkins/inbound-agent:latest
-                 - name: helm
+                  - name: helm
                     image: lachlanevenson/k8s-helm:v3.1.1
                     command: "/bin/sh -c"
                     args: "cat"
