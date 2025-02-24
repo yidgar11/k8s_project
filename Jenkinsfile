@@ -99,7 +99,7 @@ pipeline {
         stage('helm') {
             steps {
                 container('helm') {
-                    sh 'cd  k8s-project/ ; helm template'
+                    sh 'cd  k8s-project/ ; helm template k8s-project .'
                 }
             }
         }
