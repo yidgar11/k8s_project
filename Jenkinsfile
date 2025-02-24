@@ -48,7 +48,8 @@ pipeline {
                         git clone https://$USERNAME:$PASSWORD@github.com/yidgar11/rmqp-example.git
                     '''
                 }
-                echo 'Repository cloned successfully!'
+                
+                echo "\033[1;32m[Success] \033[0m Repository cloned successfully! " 
 
                 echo "jenkins project files: "
                 sh "ls -l " 
@@ -66,6 +67,10 @@ pipeline {
                 container('docker') {
                     sh 'docker build -t yidgar11/consumer:1.0 -f rmqp-example/consumer/Dockerfile rmqp-example/consumer'
                     sh 'docker build -t yidgar11/producer:1.0 -f rmqp-example/producer/Dockerfile rmqp-example/producer'
+                    echo "\033[1;32m[Success] \033[0m Docker imags built successfully! " 
+
+                    //echo "\033[1;33m[Info]    \033[0m $1"
+                    //echo "\033[1;31m[Error]   \033[0m $1"
                 }
             }
         }
@@ -79,9 +84,11 @@ pipeline {
                             echo "DockerHub Login using credentials..."
                             docker login docker.io -u $USERNAME -p $PASSWORD
                          '''
+                         echo "\033[1;32m[Success] \033[0m DockerHub Login successfully! " 
                         }
                         sh 'docker push yidgar11/consumer:1.0'
                         sh 'docker push yidgar11/producer:1.0'
+                        echo "\033[1;32m[Success] \033[0m images pushed to DockerHub successfully! " 
                     }
                 }
             }
@@ -92,6 +99,7 @@ pipeline {
             steps {
                 container('docker') {
                     sh 'docker images | grep -e "producer" -e "consumer" '
+                    echo "\033[1;32m[Success] \033[0m test successfully! " 
                 }
             }
         }
@@ -100,6 +108,7 @@ pipeline {
             steps {
                 container('helm') {
                     sh 'cd  k8s-project/ ; helm template k8s-project .'
+                    echo "\033[1;32m[Success] \033[0m helm successfully! " 
                 }
             }
         }
