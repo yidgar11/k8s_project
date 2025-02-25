@@ -20,8 +20,6 @@ image2:
   pullPolicy: Always
   tag: "1.0"
 
-imagePullSecrets: []
-
 # This is to override the chart name.
 nameOverride: ""
 fullnameOverride: ""
@@ -29,21 +27,25 @@ fullnameOverride: ""
 podLabels: {}
 
 service:
+  name: rabbitmq-service
+  mainName: rabbitmq-main
+  mgmtName: rabbitmq-mgmt
   type: ClusterIP
-  port: 80
+  protocol: TCP
+  rabbitmqMainPort: 5672
+  rabbitmqMainTargetPort: 5672
+  rabbitmqMgmtPort: 15672
+  rabbitmqMgmtTargetPort: 15672
+
 
 ingress:
   enabled: false
-  className: ""
   hosts:
-    - host: chart-example.local
+    - host: k8sproject
       paths:
         - path: /
           pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+
 
 resources: {}
   # limits:

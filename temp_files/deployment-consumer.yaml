@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "k8s-project.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ include "k8s-project.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "k8s-project.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "k8s-project.name" . }}
+    spec:
+      containers:
+        - name: {{ .Values.image1.name }}
+          image: {{ .Values.image1.repository }}:{{ .Values.image1.tag }}
+          imagePullPolicy: {{ .Values.image1.pullPolicy }}
+          command: ["python3", "consumer.py", "-p", "5672", "-s", "{{ .Values.service.name }}"]
+          env:
+            - name: RABBITMQ_HOST
+              value: "rabbitmq" # RabbitMQ service hostname
+          ports:
+            - name: http
+              containerPort: 5672

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ include "k8s-project.name" . }}
+  type: {{ .Values.service.type }}
+  ports:
+    - protocol: {{ .Values.service.protocol }}
+      port: {{ .Values.service.rabbitmqMainPort }}
+      targetPort: {{ .Values.service.rabbitmqMainTargetPort }}
+      name: {{ .Values.service.mainName }}
+    - protocol:  {{ .Values.service.protocol }}
+      port: {{ .Values.service.rabbitmqMgmtPort }}
+      targetPort:  {{ .Values.service.rabbitmqMgmtTargetPort }}
+      name: {{ .Values.service.mgmtName }}
