@@ -15,8 +15,6 @@ pipeline {
                   - name: helm
                     image: lachlanevenson/k8s-helm:v3.1.1
                     command:
-                    // - cat
-                    // tty: true
                     privileged: true
                   - name: docker
                     image: docker:latest
