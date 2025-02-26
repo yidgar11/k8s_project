@@ -48,9 +48,32 @@ Use the images created in the CI pipeline (uploaded to github):
 
 To check the outcome of the templates files 
 ```shell
+cd k8s_project # if needed 
 helm template k8s-project .
 ```
 
+## 3.3 Install the helm chart 
+```shell
+cd k8s_project # if needd 
+helm install my-rabbitmq-project k8s-project
+```
+
+# 4. install rabbitmq exporter 
+```shell
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install k8s-project-exporter prometheus-community/prometheus-rabbitmq-exporter -n $NS
+
+# to check the service , run below: 
+k port-forward service/k8s-project-exporter-prometheus-rabbitmq-exporter -n $NS 8090:9419
+curl localhost:8090/metrics
+```
+![img_2.png](img_2.png)
+
+
+# 5. update the pipelines in Jenkinsfile and run the pipeline 
+5.1 Update the Jenkinsfile with the CI and CD steps
+5.2 run the pipeline and check that the project is deployed and working properly
 
 
 # Appendix 
@@ -58,6 +81,19 @@ helm template k8s-project .
 ```shell
 k get pod ${PODNAME} -n ${NS} -o jsonpath='{range .status.containerStatuses[*]}{"\nContainer: "}{.name}{"\nState: "}{.state}{"\nReady: "}{.ready}{"\n"}{end}'
 ```
+
+# Push helm chart to Dockerhub
+```shell
+cd k8s-project 
+
+# create a package 
+helm package .
+# this will create k8s-project-1.0.0.tgz
+
+# push to dockerhub
+helm push k8s-project-1.0.0.tgz oci://registry-1.docker.io/yidgar11/
+```
+
 
 # RabbitMQ
 ## get the rabbitmq password (user=user)
