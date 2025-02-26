@@ -114,11 +114,23 @@ pipeline {
             }
         }
 
-        stage('helm') {
+        stage('helm install') {
             steps {
                 container('helm') {
-                    sh 'cd  k8s-project/ ; helm template k8s-project .'
+                    //sh 'cd  k8s-project/ ; helm template k8s-project .'
+                    sh 'helm upgrade my-rabbitmq-project ./' 
+                    ansiColor('vga') {
+                            echo '\033[42m\033[97m[Success] helm successfully!\033[0m'
+                        }
+                }
+            }
+        }
 
+        stage('helm push') {
+            steps {
+                container('helm') {
+                    //sh 'cd  k8s-project/ ; helm template k8s-project .'
+                    sh 'helm push k8s-project-1.0.0.tgz oci://registry-1.docker.io/yidgar11/' 
                     ansiColor('vga') {
                             echo '\033[42m\033[97m[Success] helm successfully!\033[0m'
                         }
