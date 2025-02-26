@@ -118,7 +118,7 @@ pipeline {
             steps {
                 container('helm') {
                     //sh 'cd  k8s-project/ ; helm template k8s-project .'
-                    sh 'helm upgrade my-rabbitmq-project ./' 
+                    sh 'helm upgrade my-rabbitmq-project k8s_project/' 
                     ansiColor('vga') {
                             echo '\033[42m\033[97m[Success] helm successfully!\033[0m'
                         }
