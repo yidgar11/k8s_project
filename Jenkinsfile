@@ -117,7 +117,6 @@ pipeline {
             steps {
                 container('helm') {
                     //sh 'cd  k8s-project/ ; helm template k8s-project .'
-                    sh 'kubectl config set-context --current --user=jenkins-admin'
                     sh 'cd  k8s-project/ ; helm install my-rabbitmq-project ./ ' 
                     ansiColor('vga') {
                             echo '\033[42m\033[97m[Success] helm successfully!\033[0m'
