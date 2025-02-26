@@ -66,9 +66,13 @@ pipeline {
             steps {
                 container('docker') {
                     sh 'docker build -t yidgar11/consumer:1.0 -f rmqp-example/consumer/Dockerfile rmqp-example/consumer'
+                    ansiColor('vga') {
+                      echo '\033[42m\033[97m[Success] Docker consumer image built successfully!\033[0m'
+                    }
+                    
                     sh 'docker build -t yidgar11/producer:1.0 -f rmqp-example/producer/Dockerfile rmqp-example/producer'
                     ansiColor('vga') {
-                      echo '\033[42m\033[97m[Success] Docker imags built successfully!\033[0m'
+                      echo '\033[42m\033[97m[Success] Docker producer image built successfully!\033[0m'
                     }
                     //echo "\033[1;33m[Info]    \033[0m $1"
                     //echo "\033[1;31m[Error]   \033[0m $1"
@@ -91,34 +95,29 @@ pipeline {
 
                         }
                         sh 'docker push yidgar11/consumer:1.0'
-                        sh 'docker push yidgar11/producer:1.0'
-
                         ansiColor('vga') {
-                            echo '\033[42m\033[97m[Success] images pushed to DockerHub  successfully!\033[0m'
+                            echo '\033[42m\033[97m[Success] consumer image pushed to DockerHub  successfully!\033[0m'
+                            }
+                        
+                        sh 'docker push yidgar11/producer:1.0'
+                        ansiColor('vga') {
+                            echo '\033[42m\033[97m[Success] producer image pushed to DockerHub  successfully!\033[0m'
+
+                        sh 'docker images | grep -e "producer" -e "consumer" '
+                        ansiColor('vga') {
+                            echo '\033[42m\033[97m[Success] Test successfully!\033[0m'
+                            }
                         }
                     }
                 }
             }
         }      
 
-        
-        stage('Test') {
-            steps {
-                container('docker') {
-                    sh 'docker images | grep -e "producer" -e "consumer" '
-
-                    ansiColor('vga') {
-                            echo '\033[42m\033[97m[Success] Test successfully!\033[0m'
-                        }
-                }
-            }
-        }
-
         stage('helm install') {
             steps {
                 container('helm') {
                     //sh 'cd  k8s-project/ ; helm template k8s-project .'
-                    sh 'helm upgrade my-rabbitmq-project k8s_project/' 
+                    sh 'cd  k8s-project/ ; helm upgrade my-rabbitmq-project ./' 
                     ansiColor('vga') {
                             echo '\033[42m\033[97m[Success] helm successfully!\033[0m'
                         }
