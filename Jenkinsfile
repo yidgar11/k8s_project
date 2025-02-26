@@ -14,7 +14,6 @@ pipeline {
                     image: jenkins/inbound-agent:latest
                   - name: helm
                     image: lachlanevenson/k8s-helm:v3.1.1
-                    command:
                     privileged: true
                   - name: docker
                     image: docker:latest
