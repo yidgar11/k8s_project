@@ -117,7 +117,7 @@ pipeline {
             steps {
                 container('helm') {
                     //sh 'cd  k8s-project/ ; helm template k8s-project .'
-                    sh 'cd  k8s-project/ ; helm install my-rabbitmq-project ./' 
+                    sh 'cd  k8s-project/ ; helm install my-rabbitmq-project ./ --service-account jenkins-admin' 
                     ansiColor('vga') {
                             echo '\033[42m\033[97m[Success] helm successfully!\033[0m'
                         }
