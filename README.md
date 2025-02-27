@@ -6,26 +6,13 @@ export NS="k8s-project"
 
 # Create the namespace 
 k create ns k8s-project
-
-# Install the RabbitMQ in the namespace 
-helm install my-rabbitmq oci://registry-1.docker.io/bitnamicharts/rabbitmq -n $NS
 ```
-
-Verify Rabbitmq is up 
-```shell
-# check using 
-k get pods/my-rabbitmq-0 -n $NS
-```
-![img_1.png](img_1.png)
-
-
 
 # Project Description
 ![img.png](img.png)
 
 
-
-# Steps 
+# Steps to create the project 
 ## 1. Install jenkins on Minikube with Agents (Docker, helm)
 See details in k8s-jenkins-project/README.MD 
 
@@ -58,25 +45,19 @@ cd k8s_project # if needd
 helm install my-rabbitmq-project k8s-project
 ```
 
-# 4. install rabbitmq exporter 
+## 4. install rabbitmq exporter (one time)
 ```shell
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm install k8s-project-exporter prometheus-community/prometheus-rabbitmq-exporter -n $NS
-````
+```
+![img_7.png](img_7.png)
 
-# 5. update the pipelines in Jenkinsfile and run the pipeline 
+## 5. update the pipelines in Jenkinsfile and run the pipeline 
 5.1 Update the Jenkinsfile with the CI and CD steps
 5.2 run the pipeline and check that the project is deployed and working properly
 
-
-# Appendix 
-## To check the containers status in the pod
-```shell
-k get pod ${PODNAME} -n ${NS} -o jsonpath='{range .status.containerStatuses[*]}{"\nContainer: "}{.name}{"\nState: "}{.state}{"\nReady: "}{.ready}{"\n"}{end}'
-```
-
-# Push helm chart to Dockerhub
+## Push helm chart to Dockerhub
 ```shell
 cd k8s-project 
 
@@ -94,8 +75,14 @@ helm push k8s-project-1.0.0.tgz oci://registry-1.docker.io/yidgar11/
 ![img_4.png](img_4.png)
 
 ## 2. Run the CD 
-Currently isssue with the helm install in the pipeline 
+Currently there is an issue with the helm install in the pipeline 
 due to the fact that the Jenkins in installed in Minikube 
+
+Currently run the helm install locally to solve this .
+```shell
+cd k8s_project # if needd 
+helm install my-rabbitmq-project k8s-project
+```
 
 ## 3. Check deployment 
 ![img_5.png](img_5.png)
@@ -121,8 +108,13 @@ curl localhost:8090/metrics
 ![img_2.png](img_2.png)
 
 
-# Appendix
-## RabbitMQ
+# Appendix 
+
+## To check the containers status in the pod
+```shell
+k get pod ${PODNAME} -n ${NS} -o jsonpath='{range .status.containerStatuses[*]}{"\nContainer: "}{.name}{"\nState: "}{.state}{"\nReady: "}{.ready}{"\n"}{end}'
+```
+
 ### get the rabbitmq password (user=user) 
 ```shell
 kubectl get secret --namespace k8s-project my-rabbitmq -o jsonpath="{.data.rabbitmq-password}" | base64 -d
