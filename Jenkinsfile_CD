@@ -1,0 +1,67 @@
+pipeline {
+    agent {
+        kubernetes {
+            //label 'kube-agent'
+            yaml '''
+                apiVersion: v1
+                kind: Pod
+                metadata:
+                  labels:
+                    jenkins: agent
+                spec:
+                  containers:
+                  - name: jnlp
+                    image: jenkins/inbound-agent:latest
+                  - name: helm
+                    image: lachlanevenson/k8s-helm:v3.1.1
+                    command:
+                    - cat
+                    tty: true
+                    privileged: true
+                  - name: docker
+                    image: docker:latest
+                    command:
+                    - cat
+                    tty: true
+                    volumeMounts:
+                      - name: docker-sock
+                        mountPath: /var/run/docker.sock
+                  volumes:
+                    - name: docker-sock
+                      hostPath:
+                        path: /var/run/docker.sock
+            '''
+        }
+    }
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials1') 
+    }
+         
+        stage('helm install') {
+            steps {
+                container('helm') {
+                    //sh 'cd  k8s-project/ ; helm template k8s-project .'
+                    sh 'cd  k8s-project/ ; helm install my-rabbitmq-project ./ -n k8s-project' 
+                    ansiColor('vga') {
+                            echo '\033[42m\033[97m[Success] helm successfully!\033[0m'
+                        }
+                }
+            }
+        }
+
+        stage('helm push') {
+            steps {
+                container('helm') {
+                    //sh 'cd  k8s-project/ ; helm template k8s-project .'
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials1', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh 'helm push k8s-project-1.0.0.tgz oci://registry-1.docker.io/yidgar11/'
+                    }
+                    ansiColor('vga') {
+                            echo '\033[42m\033[97m[Success] helm successfully!\033[0m'
+                        }
+                }
+            }
+        }
+    }
+}
