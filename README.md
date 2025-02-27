@@ -54,8 +54,8 @@ helm install k8s-project-exporter prometheus-community/prometheus-rabbitmq-expor
 ![img_7.png](img_7.png)
 
 ## 5. update the pipelines in Jenkinsfile and run the pipeline 
-5.1 Update the Jenkinsfile with the CI and CD steps
-5.2 run the pipeline and check that the project is deployed and working properly
+### 5.1 Update the Jenkinsfile with the CI and CD steps
+### 5.2 run the pipeline and check that the project is deployed and working properly
 
 ## Push helm chart to Dockerhub
 ```shell
@@ -71,10 +71,12 @@ helm push k8s-project-1.0.0.tgz oci://registry-1.docker.io/yidgar11/
 
 # Verifications 
 
-## 1. Run the CI
+## 1. Run the CI  (using the jenkinsfile_CI)
 ![img_4.png](img_4.png)
 
-## 2. Run the CD 
+
+
+## 2. Run the CD  (using the jenkinsfile_CD)
 Currently there is an issue with the helm install in the pipeline 
 due to the fact that the Jenkins in installed in Minikube 
 
@@ -93,14 +95,14 @@ k logs pod/my-rabbitmq-project-k8s-project-6d47457b74-rgv25 -n $NS -c consumer
 ```
 ![img_6.png](img_6.png)
 
-## Check RabbitMQ UI
+## 5. Check RabbitMQ UI
 ```shell
 k port-forward service/rabbitmq-service -n $NS 8040:15672
 ```
 run in browser localhost:8040
 ![img_3.png](img_3.png)
 
-# Check the RabbitMq exporter service metrics : 
+# 6. Check the RabbitMq exporter service metrics : 
 ```shell
 k port-forward service/k8s-project-exporter-prometheus-rabbitmq-exporter -n $NS 8090:9419
 curl localhost:8090/metrics
