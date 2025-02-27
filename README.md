@@ -63,13 +63,7 @@ helm install my-rabbitmq-project k8s-project
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm install k8s-project-exporter prometheus-community/prometheus-rabbitmq-exporter -n $NS
-
-# to check the service , run below: 
-k port-forward service/k8s-project-exporter-prometheus-rabbitmq-exporter -n $NS 8090:9419
-curl localhost:8090/metrics
-```
-![img_2.png](img_2.png)
-
+````
 
 # 5. update the pipelines in Jenkinsfile and run the pipeline 
 5.1 Update the Jenkinsfile with the CI and CD steps
@@ -94,20 +88,48 @@ helm package .
 helm push k8s-project-1.0.0.tgz oci://registry-1.docker.io/yidgar11/
 ```
 
+# Verifications 
 
-# RabbitMQ
-## get the rabbitmq password (user=user)
+## 1. Run the CI
+![img_4.png](img_4.png)
+
+## 2. Run the CD 
+Currently isssue with the helm install in the pipeline 
+due to the fact that the Jenkins in installed in Minikube 
+
+## 3. Check deployment 
+![img_5.png](img_5.png)
+
+## 4. check consumer get the messages 
+```shell
+k logs pod/my-rabbitmq-project-k8s-project-6d47457b74-rgv25 -n $NS -c consumer
+```
+![img_6.png](img_6.png)
+
+## Check RabbitMQ UI
+```shell
+k port-forward service/rabbitmq-service -n $NS 8040:15672
+```
+run in browser localhost:8040
+![img_3.png](img_3.png)
+
+# Check the RabbitMq exporter service metrics : 
+```shell
+k port-forward service/k8s-project-exporter-prometheus-rabbitmq-exporter -n $NS 8090:9419
+curl localhost:8090/metrics
+```
+![img_2.png](img_2.png)
+
+
+# Appendix
+## RabbitMQ
+### get the rabbitmq password (user=user) 
 ```shell
 kubectl get secret --namespace k8s-project my-rabbitmq -o jsonpath="{.data.rabbitmq-password}" | base64 -d
 ``` 
 
-## To Access the RabbitMQ AMQP port:
-```shell
-# URL : amqp://127.0.0.1:5672/
-kubectl port-forward --namespace k8s-project svc/my-rabbitmq 5672:5672
-```
 
-## To Access the RabbitMQ Management interface:
+### To Access the RabbitMQ Management interface:
 ```shell
 # URL : http://127.0.0.1:15672/
 kubectl port-forward --namespace k8s-project svc/my-rabbitmq 15672:15672
